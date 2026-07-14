@@ -874,42 +874,91 @@
                 <div class="expand-indicator">▼</div>
                 <div class="extra-info" style="font-weight: 700; color: var(--main-text);">
                     I REALLYY HOPE U GET BETTER SOONN BROR IM ALWAYS THERE FOR U AND IM RIGHT HERE PLS CONTACT ME IF U NEED ME OR SMTH TAKE CAREE BROROR
-        
+                </div>
             </div>
 
         </div>
 
     </div>
 
-<script>
-    // Create a new audio object using your local file
-    var audioPlayer = new Audio('rain.mp3');
-    
-    // Configure settings: loop and start muted for the fade-in
-    audioPlayer.loop = true;
-    audioPlayer.volume = 0;
+    <audio id="rainAudio" src="rain.mp3" loop></audio>
 
-    // Start playing once the audio is ready
-    audioPlayer.addEventListener('canplaythrough', function() {
-        audioPlayer.play().then(function() {
-            // Smooth volume fade-in
-            var targetVolume = 0.45; // In standard HTML5 audio, volume ranges from 0.0 to 1.0 (0.45 is 45%)
-            var currentVolume = 0;
-            var fadeInterval = setInterval(function() {
-                if (currentVolume < targetVolume) {
-                    currentVolume += 0.05; // Increase by 5% increments
-                    // Cap it at target volume to prevent exceeding 1.0
-                    audioPlayer.volume = Math.min(currentVolume, targetVolume);
-                } else {
-                    clearInterval(fadeInterval);
+    <script>
+        var isUnlocked = false;
+        var audio = document.getElementById('rainAudio');
+        var isPlaying = false;
+
+        // Click to expand/collapse cards smoothly
+        function toggleCard(cardElement) {
+            if (!isUnlocked) return;
+            // Close other cards first for clean accordian feel
+            document.querySelectorAll('.step-card').forEach(otherCard => {
+                if (otherCard !== cardElement) {
+                    otherCard.classList.remove('expanded');
                 }
-            }, 200);
-        }).catch(function(error) {
-            console.log("Playback blocked by browser autoplay policy. Require user interaction.", error);
-        });
-    });
-</script>
+            });
+            // Toggle clicked card
+            cardElement.classList.toggle('expanded');
+        }
 
-    
+        // Add explicit click listener on the sunflower wrapper to reveal everything
+        document.getElementById('sunflowerWrapper').addEventListener('click', function(e) {
+            e.stopPropagation(); // Avoid firing window global click event twice
+            
+            if (!isUnlocked) {
+                isUnlocked = true;
+                
+                // Activate core components
+                document.getElementById('mainHeader').classList.add('active');
+                document.getElementById('scrollIndicator').classList.add('active');
+                document.getElementById('scrollContent').classList.add('active');
+                document.getElementById('breathingStage').classList.add('active-flower');
+                
+                // Allow page scrolling on layout
+                document.body.style.pointerEvents = "auto";
+            }
+            
+            // Trigger background rain music loop setup
+            startRain();
+        });
+
+        // Adjust headers and stages depending on scrolling levels
+        window.addEventListener('scroll', () => {
+            if (!isUnlocked) return;
+            if (window.scrollY > 30) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
+
+        function startRain() {
+            if (isPlaying) return;
+            isPlaying = true;
+            
+            // Reset volume and attempt playback
+            audio.volume = 0;
+            audio.play().then(function() {
+                var targetVolume = 0.45; // 45% volume matches the previous target logic
+                var currentVolume = 0;
+                var fadeInterval = setInterval(function() {
+                    if (currentVolume < targetVolume) {
+                        currentVolume += 0.05;
+                        if (currentVolume > targetVolume) currentVolume = targetVolume;
+                        audio.volume = currentVolume;
+                    } else {
+                        clearInterval(fadeInterval);
+                    }
+                }, 300);
+            }).catch(function(error) {
+                console.log("Audio playback waiting for user gesture context activation.");
+                isPlaying = false;
+            });
+        }
+
+        window.addEventListener('touchstart', startRain);
+        window.addEventListener('keydown', startRain);
+    </script>
+
 </body>
 </html>
