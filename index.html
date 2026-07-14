@@ -882,26 +882,25 @@
     </div>
 
     <div id="youtube-player-container"></div>
-
     <script>
         var isUnlocked = false;
+        var player;
+        var isPlaying = false;
 
         // Click to expand/collapse cards smoothly
         function toggleCard(cardElement) {
             if (!isUnlocked) return;
-            // Close other cards first for clean accordian feel
             document.querySelectorAll('.step-card').forEach(otherCard => {
                 if (otherCard !== cardElement) {
                     otherCard.classList.remove('expanded');
                 }
             });
-            // Toggle clicked card
             cardElement.classList.toggle('expanded');
         }
 
         // Add explicit click listener on the sunflower wrapper to reveal everything
         document.getElementById('sunflowerWrapper').addEventListener('click', function(e) {
-            e.stopPropagation(); // Avoid firing window global click event twice
+            e.stopPropagation(); 
             
             if (!isUnlocked) {
                 isUnlocked = true;
@@ -914,10 +913,10 @@
                 
                 // Allow page scrolling on layout
                 document.body.style.pointerEvents = "auto";
+
+                // FIX: Load and play the audio directly inside the user click event
+                startRainAudio();
             }
-            
-            // Trigger background rain music loop setup
-            startRain();
         });
 
         // Adjust headers and stages depending on scrolling levels
@@ -930,17 +929,22 @@
             }
         });
 
-        // Load YouTube Iframe Player API
+        // Load YouTube Iframe Player API dynamically
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        var player;
-        var playerReady = false;
-        var isPlaying = false;
-
+        // This just registers the API, we don't play yet
         function onYouTubeIframeAPIReady() {
+            // Player will be built when clicked to bypass autoplay blocks
+        }
+
+        function startRainAudio() {
+            if (isPlaying) return;
+            isPlaying = true;
+
+            // Create the player directly on user interaction
             player = new YT.Player('youtube-player-container', {
                 height: '1',
                 width: '1',
@@ -957,38 +961,27 @@
                     'showinfo': 0
                 },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': function(event) {
+                        event.target.unMute();
+                        event.target.setVolume(0);
+                        event.target.playVideo();
+
+                        // Smooth volume fade-in
+                        var targetVolume = 45;
+                        var currentVolume = 0;
+                        var fadeInterval = setInterval(function() {
+                            if (currentVolume < targetVolume) {
+                                currentVolume += 5;
+                                player.setVolume(currentVolume);
+                            } else {
+                                clearInterval(fadeInterval);
+                            }
+                        }, 200);
+                    }
                 }
             });
         }
-
-        function onPlayerReady(event) {
-            playerReady = true;
-            player.mute();
-            player.playVideo();
-        }
-
-        function startRain() {
-            if (isPlaying || !playerReady) return;
-            isPlaying = true;
-            player.unMute();
-            player.setVolume(0);
-
-            var targetVolume = 45;
-            var currentVolume = 0;
-            var fadeInterval = setInterval(function() {
-                if (currentVolume < targetVolume) {
-                    currentVolume += 5;
-                    player.setVolume(currentVolume);
-                } else {
-                    clearInterval(fadeInterval);
-                }
-            }, 300);
-        }
-
-        window.addEventListener('touchstart', startRain);
-        window.addEventListener('keydown', startRain);
-    </script>
-
+    </script> 
+    
 </body>
 </html>
