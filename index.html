@@ -64,13 +64,20 @@
             width: 90%;
             max-width: 500px;
             z-index: 10;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
             background: rgba(255, 255, 255, 0.85); /* High opacity background */
             backdrop-filter: blur(8px);
             border: var(--strong-border);
             border-radius: 24px;
             padding: 18px 10px;
             box-shadow: 0 8px 0px var(--main-text);
+        }
+
+        header.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         h1 {
@@ -102,7 +109,7 @@
             flex-direction: column;
             align-items: center;
             z-index: 20; 
-            pointer-events: none;
+            pointer-events: auto; /* Enable touch/clicks for sunflower */
             width: 100vw;
             padding: 30px 0;
             box-sizing: border-box;
@@ -128,6 +135,7 @@
             justify-content: center;
             align-items: center;
             transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: auto; /* Keep clickable always */
         }
 
         /* Glowing energetic ripples */
@@ -138,9 +146,13 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 179, 198, 0.5) 0%, rgba(255,255,255,0) 70%);
             pointer-events: none;
+            opacity: 0; /* Hidden until activated */
+        }
+        
+        .active-flower .ripple {
             animation: ripplePulse var(--animation-time) ease-in-out infinite;
         }
-        .ripple-2 {
+        .active-flower .ripple-2 {
             animation-delay: 0.3s;
             opacity: 0.6;
         }
@@ -164,6 +176,8 @@
         /* Sunflower Animations with Dark Outlines for maximum pop */
         .petals-outer {
             transform-origin: 60px 60px;
+        }
+        .active-flower .petals-outer {
             animation: bloomOuter var(--animation-time) ease-in-out infinite;
         }
 
@@ -175,11 +189,15 @@
 
         .petals-inner {
             transform-origin: 60px 60px;
+        }
+        .active-flower .petals-inner {
             animation: bloomInner var(--animation-time) ease-in-out infinite;
         }
 
         .flower-center {
             transform-origin: 60px 60px;
+        }
+        .active-flower .flower-center {
             animation: centerBreathe var(--animation-time) ease-in-out infinite;
         }
 
@@ -217,12 +235,36 @@
             animation-iteration-count: infinite;
         }
 
-        .breathe-in {
+        .active-flower .breathe-in {
             animation-name: scaleAndFadeIn;
         }
 
-        .breathe-out {
+        .active-flower .breathe-out {
             animation-name: scaleAndFadeOut;
+        }
+
+        /* Initial Click Me Prompt Container */
+        .click-me-prompt {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: lowercase;
+            margin: 0;
+            opacity: 1;
+            visibility: visible;
+            color: var(--main-text);
+            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            animation: titlePulse 2s infinite ease-in-out alternate;
+        }
+
+        .active-flower .click-me-prompt {
+            opacity: 0;
+            visibility: hidden;
         }
 
         /* Floating Scroll Indicator */
@@ -232,15 +274,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            opacity: 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            animation: handBounce 2s infinite ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
             color: var(--main-text);
             font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: 0.8px;
             text-transform: uppercase;
             text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+        }
+
+        .scroll-indicator.active {
+            opacity: 1;
+            visibility: visible;
+            animation: handBounce 2s infinite ease-in-out;
         }
 
         .scroll-indicator svg {
@@ -261,6 +309,14 @@
             z-index: 10; 
             padding-bottom: 150px;
             box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+
+        .scrollable-content.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         .step-card {
@@ -379,6 +435,9 @@
             stroke-width: 5;
             stroke-linecap: round;
             stroke-dasharray: 12, 120;
+        }
+        
+        .active-flower .air-stream {
             animation: airFlowCycle var(--animation-time) ease-in-out infinite;
         }
 
@@ -489,7 +548,7 @@
         
         /* 1. Hide original title cleanly */
         .scrolled header {
-            opacity: 0;
+            opacity: 0 !important;
             transform: translate(-50%, -30px);
             pointer-events: none;
         }
@@ -518,7 +577,7 @@
 
         /* 3. Drop scroll indicator hand */
         .scrolled .scroll-indicator {
-            opacity: 0;
+            opacity: 0 !important;
             transform: translateY(20px);
             pointer-events: none;
         }
@@ -527,6 +586,7 @@
             h1 { font-size: 1.5rem; }
             .card-text { font-size: 1.2rem; }
             .fixed-breathing-stage { transform: translate(-50%, -45%); }
+            .scrolled .fixed-breathing-stage { transform: translate(-50%, 0); }
         }
 
         /* --------------------------------- */
@@ -659,12 +719,12 @@
 
     <div class="scroll-runway">
 
-        <header>
+        <header id="mainHeader">
             <h1>Calm Down Zanieke, <span class="glow-text">I love you.</span></h1>
         </header>
 
-        <div class="fixed-breathing-stage">
-            <div class="flower-wrapper">
+        <div class="fixed-breathing-stage" id="breathingStage">
+            <div class="flower-wrapper" id="sunflowerWrapper">
                 <div class="ripple"></div>
                 <div class="ripple ripple-2"></div>
                 
@@ -725,6 +785,7 @@
             </div>
 
             <div class="text-stage">
+                <p class="click-me-prompt">click me</p>
                 <p class="breath-text breathe-in">breathe in</p>
                 <p class="breath-text breathe-out">breathe out</p>
             </div>
@@ -740,7 +801,7 @@
             </div>
         </div>
 
-        <div class="scrollable-content">
+        <div class="scrollable-content" id="scrollContent">
 
             <div class="step-card" onclick="toggleCard(this)">
                 <div class="icon-container-wrapper">
@@ -823,17 +884,11 @@
     <div id="youtube-player-container"></div>
 
     <script>
-        // Adjust headers and stages depending on scrolling levels
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-        });
+        var isUnlocked = false;
 
         // Click to expand/collapse cards smoothly
         function toggleCard(cardElement) {
+            if (!isUnlocked) return;
             // Close other cards first for clean accordian feel
             document.querySelectorAll('.step-card').forEach(otherCard => {
                 if (otherCard !== cardElement) {
@@ -843,6 +898,37 @@
             // Toggle clicked card
             cardElement.classList.toggle('expanded');
         }
+
+        // Add explicit click listener on the sunflower wrapper to reveal everything
+        document.getElementById('sunflowerWrapper').addEventListener('click', function(e) {
+            e.stopPropagation(); // Avoid firing window global click event twice
+            
+            if (!isUnlocked) {
+                isUnlocked = true;
+                
+                // Activate core components
+                document.getElementById('mainHeader').classList.add('active');
+                document.getElementById('scrollIndicator').classList.add('active');
+                document.getElementById('scrollContent').classList.add('active');
+                document.getElementById('breathingStage').classList.add('active-flower');
+                
+                // Allow page scrolling on layout
+                document.body.style.pointerEvents = "auto";
+            }
+            
+            // Trigger background rain music loop setup
+            startRain();
+        });
+
+        // Adjust headers and stages depending on scrolling levels
+        window.addEventListener('scroll', () => {
+            if (!isUnlocked) return;
+            if (window.scrollY > 30) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
 
         // Load YouTube Iframe Player API
         var tag = document.createElement('script');
@@ -900,7 +986,6 @@
             }, 300);
         }
 
-        window.addEventListener('click', startRain);
         window.addEventListener('touchstart', startRain);
         window.addEventListener('keydown', startRain);
     </script>
