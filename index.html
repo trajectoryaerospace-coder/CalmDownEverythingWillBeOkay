@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Zanieke, with Love</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Bold, Cozy High-Contrast Theme */
+        :root {
+            --pastel-pink: #ffa6c9;
+            --pastel-yellow: #ffd54f;
+            --pastel-white: #fffcf9;
+            --soft-rose: #d6336c; /* Rich, vibrant pink for high legibility */
+            --main-text: #2c1a26; /* Deep charcoal-plum for ultra-clear text contrast */
+            --animation-time: 4.8s;
+            --strong-border: 4px solid #2c1a26; /* Bold, clear outline */
+            --soft-border: 2px solid #2c1a26;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            text-align: center;
+            /* Richer, deeper pastel gradients for much better readability */
+            background: linear-gradient(-45deg, #fff3f5, #ffb3c6, #ffe082, #ffd54f, #ffccd5, #fff5f7);
+            background-size: 400% 400%;
+            animation: gradientSwitch 16s ease-in-out infinite;
+            color: var(--main-text);
+            cursor: pointer;
+            overflow-x: hidden;
+        }
+
+        /* Ambient floating sparkle particles */
+        .sparkle {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--main-text);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatAndTwinkle 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        /* Extended scroll runway height for the extra final card */
+        .scroll-runway {
+            position: relative;
+            height: 320vh; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Main Header with elegant bold border */
+        header {
+            position: absolute;
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            z-index: 10;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            background: rgba(255, 255, 255, 0.85); /* High opacity background */
+            backdrop-filter: blur(8px);
+            border: var(--strong-border);
+            border-radius: 24px;
+            padding: 18px 10px;
+            box-shadow: 0 8px 0px var(--main-text);
+        }
+
+        h1 {
+            font-size: 1.85rem; 
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+            color: var(--main-text);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+
+        /* Warm rose-pink glow for "I love you" */
+        .glow-text {
+            display: inline-block;
+            color: var(--soft-rose);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 92, 138, 0.4), 0 0 20px rgba(255, 92, 138, 0.2);
+            animation: heartGlow 2.5s ease-in-out infinite alternate;
+        }
+
+        /* FIXED STAGE CONTAINER - High-contrast borders and frosted background */
+        .fixed-breathing-stage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20; 
+            pointer-events: none;
+            width: 100vw;
+            padding: 30px 0;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0);
+            border-top: 4px solid rgba(44, 26, 38, 0);
+            border-bottom: 4px solid rgba(44, 26, 38, 0);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0);
+            transition: top 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        background 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        box-shadow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        border-top 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        border-bottom 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Flower wrapper scale and breathing ripples */
+        .flower-wrapper {
+            position: relative;
+            width: 230px;
+            height: 230px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Glowing energetic ripples */
+        .ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 179, 198, 0.5) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+            animation: ripplePulse var(--animation-time) ease-in-out infinite;
+        }
+        .ripple-2 {
+            animation-delay: 0.3s;
+            opacity: 0.6;
+        }
+
+        /* Main Sunflower SVG Container with distinct border boundary */
+        .sunflower-container {
+            width: 100%; 
+            height: 100%; 
+            position: relative;
+            filter: drop-shadow(0 8px 16px rgba(44, 26, 38, 0.15));
+            border-radius: 50%;
+            border: var(--strong-border);
+            box-sizing: border-box;
+            background: #fffdfa;
+        }
+
+        .sunflower-container svg {
+            overflow: visible;
+        }
+
+        /* Sunflower Animations with Dark Outlines for maximum pop */
+        .petals-outer {
+            transform-origin: 60px 60px;
+            animation: bloomOuter var(--animation-time) ease-in-out infinite;
+        }
+
+        .petals-outer path, .petals-inner path {
+            stroke: var(--main-text);
+            stroke-width: 1.5px;
+            stroke-linejoin: round;
+        }
+
+        .petals-inner {
+            transform-origin: 60px 60px;
+            animation: bloomInner var(--animation-time) ease-in-out infinite;
+        }
+
+        .flower-center {
+            transform-origin: 60px 60px;
+            animation: centerBreathe var(--animation-time) ease-in-out infinite;
+        }
+
+        .flower-center circle {
+            stroke: var(--main-text);
+            stroke-width: 1.5px;
+        }
+
+        /* Dynamic text stage */
+        .text-stage {
+            position: relative;
+            width: 280px;
+            height: 40px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Bold dark typography with soft white outlines for legibility */
+        .breath-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-size: 2rem; 
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: lowercase;
+            margin: 0;
+            opacity: 0;
+            color: var(--main-text);
+            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
+            animation-duration: var(--animation-time);
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .breathe-in {
+            animation-name: scaleAndFadeIn;
+        }
+
+        .breathe-out {
+            animation-name: scaleAndFadeOut;
+        }
+
+        /* Floating Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: -80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            animation: handBounce 2s infinite ease-in-out;
+            color: var(--main-text);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+        }
+
+        .scroll-indicator svg {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            margin-bottom: 6px;
+            stroke: var(--main-text);
+        }
+
+        /* --- BEAUTIFUL GLASSMORPHISM SCROLL CARDS --- */
+        .scrollable-content {
+            position: absolute;
+            top: 100vh; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            z-index: 10; 
+            padding-bottom: 150px;
+            box-sizing: border-box;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.85); /* More opaque background for contrast */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: var(--strong-border); /* Dark Bold outline */
+            border-radius: 32px;
+            width: 85%;
+            max-width: 480px;
+            padding: 40px 30px;
+            box-sizing: border-box;
+            box-shadow: 0 12px 0px var(--main-text); /* Flat offset retro shadow */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 0px var(--main-text);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Expanding details logic */
+        .extra-info {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin-top 0.4s ease;
+            font-size: 1.15rem;
+            line-height: 1.5;
+            color: #5d3f52;
+            text-align: center;
+        }
+
+        /* Expanded card states */
+        .step-card.expanded {
+            background: #fffdfa;
+        }
+
+        .step-card.expanded .extra-info {
+            max-height: 160px;
+            opacity: 1;
+            margin-top: 1.5rem;
+            border-top: 3px dashed var(--main-text);
+            padding-top: 1.2rem;
+        }
+
+        .card-text {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--main-text);
+            margin-top: 1.5rem;
+            line-height: 1.4;
+            letter-spacing: -0.2px;
+        }
+
+        /* Chevron indicator styling */
+        .expand-indicator {
+            font-size: 1rem;
+            color: var(--main-text);
+            font-weight: bold;
+            margin-top: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .step-card.expanded .expand-indicator {
+            transform: rotate(180deg);
+        }
+
+        /* --- INTERACTIVE SVG ICON CONTAINER WITH BORDERS & CLICKABLE PULSE --- */
+        .icon-container-wrapper {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: var(--strong-border);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 0px var(--main-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: clickablePulse 2s infinite ease-in-out;
+        }
+
+        /* Hover states to scale up icons */
+        .step-card:hover .icon-container-wrapper {
+            transform: scale(1.15);
+            animation-play-state: paused; /* stop automated pulse when user engages */
+            background: #fffdfa;
+        }
+
+        /* Soft click-me idle expansion loop */
+        @keyframes clickablePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* --- SVG ASSETS WITH SOLID CONTRAST OUTLINES --- */
+
+        /* Nose Section Asset */
+        .nose-container {
+            width: 90px;
+            height: 90px;
+        }
+
+        .air-stream {
+            fill: none;
+            stroke: var(--soft-rose);
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 12, 120;
+            animation: airFlowCycle var(--animation-time) ease-in-out infinite;
+        }
+
+        .air-stream-left { animation-name: airFlowCycleLeft; }
+        .air-stream-right { animation-name: airFlowCycleRight; }
+
+        /* Wind/Circulating Air Asset */
+        .wind-container {
+            width: 90px;
+            height: 90px;
+        }
+
+        .wind-line {
+            fill: none;
+            stroke: var(--main-text);
+            stroke-width: 4.5;
+            stroke-linecap: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: windBlow 4s ease-in-out infinite;
+        }
+
+        .wind-line-top {
+            animation-delay: 0s;
+        }
+
+        .wind-line-bottom {
+            animation-delay: 0.8s;
+            stroke: var(--soft-rose);
+            stroke-width: 3.5;
+        }
+
+        .leaf {
+            fill: #7cb342;
+            stroke: var(--main-text);
+            stroke-width: 1.5;
+            opacity: 0;
+            animation: leafFloat 4s ease-in-out infinite;
+        }
+
+        .leaf-1 { animation-delay: 0.4s; }
+        .leaf-2 { animation-delay: 1.2s; }
+
+        /* Walking Feet Asset - High Compatibility Translation Engine (Guaranteed Smooth) */
+        .walk-container {
+            width: 90px;
+            height: 90px;
+        }
+
+        .ground-line {
+            stroke: var(--main-text);
+            stroke-width: 4.5;
+            stroke-linecap: round;
+        }
+
+        /* Clean translation-based animations for reliable browser rendering */
+        .shoe-left-group {
+            animation: slideWalkLeft 1.2s infinite ease-in-out;
+        }
+
+        .shoe-right-group {
+            animation: slideWalkRight 1.2s infinite ease-in-out;
+        }
+
+        @keyframes slideWalkLeft {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(12px, -15px); }
+        }
+
+        @keyframes slideWalkRight {
+            0%, 100% { transform: translate(12px, -15px); }
+            50% { transform: translate(0, 0); }
+        }
+
+        /* --- WARM PERSONAL FINAL CARD (HIGH CONTRAST) --- */
+        .final-message-card {
+            background: #fff0f5 !important;
+            border: 4px solid var(--soft-rose) !important;
+            box-shadow: 0 12px 0px var(--soft-rose) !important;
+        }
+
+        .final-message-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 0px var(--soft-rose) !important;
+        }
+
+        .final-text {
+            color: var(--main-text);
+            font-size: 1.5rem !important;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-top: 1.5rem;
+        }
+
+        .heart-icon {
+            animation: heartThrob 1.2s infinite ease-in-out;
+            fill: var(--soft-rose);
+            stroke: var(--main-text);
+            stroke-width: 1.5;
+        }
+
+        @keyframes heartThrob {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* --- SCROLLING COMPACT STATES --- */
+        
+        /* 1. Hide original title cleanly */
+        .scrolled header {
+            opacity: 0;
+            transform: translate(-50%, -30px);
+            pointer-events: none;
+        }
+
+        /* 2. Frosted glass header shield with heavy high-contrast borders */
+        .scrolled .fixed-breathing-stage {
+            top: 0%;
+            transform: translate(-50%, 0);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.98) 0%, 
+                rgba(255, 212, 222, 0.98) 50%, 
+                rgba(255, 240, 200, 0.98) 100%
+            );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 4px solid var(--main-text);
+            border-bottom: 4px solid var(--main-text);
+            box-shadow: 0 12px 30px rgba(44, 26, 38, 0.15);
+        }
+
+        .scrolled .flower-wrapper {
+            transform: scale(0.52);
+            margin-bottom: 0rem;
+            margin-top: 5px;
+        }
+
+        /* 3. Drop scroll indicator hand */
+        .scrolled .scroll-indicator {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .card-text { font-size: 1.2rem; }
+            .fixed-breathing-stage { transform: translate(-50%, -45%); }
+        }
+
+        /* --------------------------------- */
+        /* Keyframe Animations */
+        /* --------------------------------- */
+
+        /* Seamless pastel aurora gradient shift */
+        @keyframes gradientSwitch {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Soft pulsing title scale */
+        @keyframes titlePulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+
+        /* Beautiful glowing effect for "I love you" */
+        @keyframes heartGlow {
+            0% {
+                text-shadow: 0 0 8px rgba(255, 92, 138, 0.3), 0 0 15px rgba(255, 92, 138, 0.15);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 16px rgba(255, 92, 138, 0.5), 0 0 25px rgba(255, 92, 138, 0.25);
+                transform: scale(1.04);
+            }
+        }
+
+        /* Bouncing scroll hand */
+        @keyframes handBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Petal Blooming loops */
+        @keyframes bloomOuter {
+            0% { transform: scale(0.75) rotate(0deg); }
+            50% { transform: scale(1.18) rotate(15deg); }
+            100% { transform: scale(0.75) rotate(0deg); }
+        }
+
+        @keyframes bloomInner {
+            0% { transform: scale(0.6) rotate(0deg); }
+            50% { transform: scale(1.12) rotate(-10deg); }
+            100% { transform: scale(0.6) rotate(0deg); }
+        }
+
+        @keyframes centerBreathe {
+            0% { transform: scale(0.85); }
+            50% { transform: scale(1.12); }
+            100% { transform: scale(0.85); }
+        }
+
+        @keyframes ripplePulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.75); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
+
+        /* Sparkle drift */
+        @keyframes floatAndTwinkle {
+            0%, 100% { transform: translateY(0) scale(0.5); opacity: 0.2; }
+            50% { transform: translateY(-40px) scale(1.1); opacity: 0.85; }
+        }
+
+        /* Breathing text flows */
+        @keyframes scaleAndFadeIn {
+            0% { opacity: 0; transform: scale(0.88); }
+            15%, 45% { opacity: 1; }
+            50% { opacity: 0; transform: scale(1.25); }
+            100% { opacity: 0; transform: scale(0.88); }
+        }
+
+        @keyframes scaleAndFadeOut {
+            0%, 49.9% { opacity: 0; transform: scale(0.88); }
+            50% { opacity: 1; transform: scale(1.25); }
+            65%, 95% { opacity: 1; }
+            100% { opacity: 0; transform: scale(0.88); }
+        }
+
+        /* Left Nostril airflow matching breathing state */
+        @keyframes airFlowCycleLeft {
+            0% { stroke-dashoffset: 150; opacity: 0; }
+            15% { opacity: 1; }
+            45% { stroke-dashoffset: 0; opacity: 0; }
+            50% { stroke-dashoffset: 0; opacity: 0; }
+            65% { opacity: 1; }
+            95% { stroke-dashoffset: 150; opacity: 0; }
+            100% { stroke-dashoffset: 150; opacity: 0; }
+        }
+
+        /* Right Nostril airflow matching breathing state */
+        @keyframes airFlowCycleRight {
+            0% { stroke-dashoffset: -150; opacity: 0; }
+            15% { opacity: 1; }
+            45% { stroke-dashoffset: 0; opacity: 0; }
+            50% { stroke-dashoffset: 0; opacity: 0; }
+            65% { opacity: 1; }
+            95% { stroke-dashoffset: -150; opacity: 0; }
+            100% { stroke-dashoffset: -150; opacity: 0; }
+        }
+
+        /* Wind blowing stream */
+        @keyframes windBlow {
+            0% { stroke-dashoffset: 100; opacity: 0; }
+            10%, 80% { opacity: 0.8; }
+            50% { stroke-dashoffset: 0; }
+            90%, 100% { stroke-dashoffset: -100; opacity: 0; }
+        }
+
+        /* Leaf fluttering stream */
+        @keyframes leafFloat {
+            0% { transform: translate(-20px, 10px) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.9; }
+            50% { transform: translate(50px, -15px) rotate(180deg); opacity: 0.9; }
+            80% { opacity: 0; }
+            100% { transform: translate(110px, -5px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sparkle" style="width: 10px; height: 10px; top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="sparkle" style="width: 15px; height: 15px; top: 25%; right: 15%; animation-delay: 1.5s;"></div>
+    <div class="sparkle" style="width: 8px; height: 8px; bottom: 20%; left: 20%; animation-delay: 3s;"></div>
+    <div class="sparkle" style="width: 12px; height: 12px; bottom: 30%; right: 8%; animation-delay: 4.5s;"></div>
+
+    <div class="scroll-runway">
+
+        <header>
+            <h1>Calm Down Zanieke, <span class="glow-text">I love you.</span></h1>
+        </header>
+
+        <div class="fixed-breathing-stage">
+            <div class="flower-wrapper">
+                <div class="ripple"></div>
+                <div class="ripple ripple-2"></div>
+                
+                <div class="sunflower-container">
+                    <svg viewBox="-40 -40 200 200" width="100%" height="100%">
+                        <defs>
+                            <linearGradient id="vibrantPetal" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF58C" />
+                                <stop offset="50%" stop-color="#FFB300" />
+                                <stop offset="100%" stop-color="#FF6F00" />
+                            </linearGradient>
+                            
+                            <radialGradient id="sunflowerCenter" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#3E1F07" />
+                                <stop offset="75%" stop-color="#231002" />
+                                <stop offset="100%" stop-color="#0F0500" />
+                            </radialGradient>
+                        </defs>
+                        
+                        <g class="petals-outer" fill="url(#vibrantPetal)">
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(0 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(30 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(60 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(90 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(120 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(150 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(180 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(210 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(240 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(270 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(300 60 60)" />
+                            <path d="M60 -25 C110 45, 10 45, 60 60 Z" transform="rotate(330 60 60)" />
+                        </g>
+
+                        <g class="petals-inner" fill="url(#vibrantPetal)" opacity="0.95">
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(15 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(45 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(75 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(105 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(135 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(165 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(195 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(225 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(255 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(285 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(315 60 60)" />
+                            <path d="M60 -10 C97 45, 23 45, 60 60 Z" transform="rotate(345 60 60)" />
+                        </g>
+                        
+                        <g class="flower-center">
+                            <circle cx="60" cy="60" r="24" fill="url(#sunflowerCenter)" />
+                            <circle cx="60" cy="60" r="21" fill="none" stroke="#FFD700" stroke-width="0.8" stroke-dasharray="2,3" opacity="0.4" />
+                            <circle cx="60" cy="60" r="16" fill="none" stroke="#FFD700" stroke-width="0.6" stroke-dasharray="1.5,2.5" opacity="0.3" />
+                            <circle cx="60" cy="60" r="10" fill="none" stroke="#FFA500" stroke-width="0.5" stroke-dasharray="1,2" opacity="0.2" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="text-stage">
+                <p class="breath-text breathe-in">breathe in</p>
+                <p class="breath-text breathe-out">breathe out</p>
+            </div>
+
+            <div class="scroll-indicator" id="scrollIndicator">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5" />
+                    <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6" />
+                    <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+                    <path d="M6 14v1.5a4.5 4.5 0 0 0 9 0V11" />
+                </svg>
+                <span>scroll down</span>
+            </div>
+        </div>
+
+        <div class="scrollable-content">
+
+            <div class="step-card" onclick="toggleCard(this)">
+                <div class="icon-container-wrapper">
+                    <div class="nose-container">
+                        <svg viewBox="0 0 100 100" width="100%" height="100%">
+                            <path d="M50 20 C46 35, 45 55, 38 65 C32 75, 40 80, 50 80 C60 80, 68 75, 62 65 C55 55, 54 35, 50 20 Z" 
+                                  fill="none" stroke="var(--main-text)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="air-stream air-stream-left" d="M35 85 C30 95, 25 115, 20 135" />
+                            <path class="air-stream air-stream-right" d="M65 85 C70 95, 75 115, 80 135" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-text">Breathe slowly through your nose.</div>
+                <div class="expand-indicator">▼</div>
+                <div class="extra-info">
+                    Breathing through your nose filters the air, warms it, and helps trigger your nervous system's natural relaxation response. Take a long, gentle breath.
+                </div>
+            </div>
+
+            <div class="step-card" onclick="toggleCard(this)">
+                <div class="icon-container-wrapper">
+                    <div class="wind-container">
+                        <svg viewBox="0 0 120 100" width="100%" height="100%">
+                            <path class="wind-line wind-line-top" d="M10 30 Q35 15, 60 30 T110 30" />
+                            <path class="wind-line wind-line-bottom" d="M15 65 Q40 50, 65 65 T115 65" />
+                            <path class="leaf leaf-1" d="M 30,25 C 33,20 38,22 35,27 C 32,26 30,28 30,25 Z" />
+                            <path class="leaf leaf-2" d="M 45,55 C 48,50 53,52 50,57 C 47,56 45,58 45,55 Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-text">Make sure to breathe in fresh air.</div>
+                <div class="expand-indicator">▼</div>
+                <div class="extra-info">
+                    Fresh air increases oxygen levels in your brain, boosting serotonin and lowering stress levels. Try opening a window or taking a step out onto a balcony.
+                </div>
+            </div>
+
+            <div class="step-card" onclick="toggleCard(this)">
+                <div class="icon-container-wrapper">
+                    <div class="walk-container">
+                        <svg viewBox="0 0 130 100" width="100%" height="100%">
+                            <line class="ground-line" x1="15" y1="80" x2="115" y2="80" />
+                            
+                            <g class="shoe-left-group">
+                                <line x1="45" y1="35" x2="45" y2="70" stroke="var(--main-text)" stroke-width="5.5" stroke-linecap="round" />
+                                <path d="M45 70 C38 70, 34 78, 50 78 Z" fill="#ff85a1" stroke="var(--main-text)" stroke-width="2" />
+                            </g>
+                            
+                            <g class="shoe-right-group">
+                                <line x1="80" y1="35" x2="80" y2="70" stroke="var(--main-text)" stroke-width="5.5" stroke-linecap="round" />
+                                <path d="M80 70 C73 70, 69 78, 85 78 Z" fill="#fca3b7" stroke="var(--main-text)" stroke-width="2" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card-text">If possible, distract yourself, go for a walk outside.</div>
+                <div class="expand-indicator">▼</div>
+                <div class="extra-info">
+                    Moving your body outdoors shifts your surroundings, which physically disrupts looping thoughts. A short, five-minute walk can completely reset your headspace.
+                </div>
+            </div>
+
+            <div class="step-card final-message-card" onclick="toggleCard(this)">
+                <div class="icon-container-wrapper" style="border-color: var(--soft-rose); background: #fff0f5;">
+                    <svg class="heart-icon" viewBox="0 0 24 24" width="70" height="70">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <div class="card-text final-text">I really hope you get better soon bror, I'm here if you need me...</div>
+                <div class="expand-indicator">▼</div>
+                <div class="extra-info" style="font-weight: 700; color: var(--main-text);">
+                    "I really hope you get better soon bror, Im here if you need me or anything just text or call me please."
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="youtube-player-container"></div>
+
+    <script>
+        // Adjust headers and stages depending on scrolling levels
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
+
+        // Click to expand/collapse cards smoothly
+        function toggleCard(cardElement) {
+            // Close other cards first for clean accordian feel
+            document.querySelectorAll('.step-card').forEach(otherCard => {
+                if (otherCard !== cardElement) {
+                    otherCard.classList.remove('expanded');
+                }
+            });
+            // Toggle clicked card
+            cardElement.classList.toggle('expanded');
+        }
+
+        // Load YouTube Iframe Player API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var playerReady = false;
+        var isPlaying = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player-container', {
+                height: '1',
+                width: '1',
+                videoId: 'TsRgQuud3Sk', 
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'loop': 1,
+                    'playlist': 'TsRgQuud3Sk',
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'showinfo': 0
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            playerReady = true;
+            player.mute();
+            player.playVideo();
+        }
+
+        function startRain() {
+            if (isPlaying || !playerReady) return;
+            isPlaying = true;
+            player.unMute();
+            player.setVolume(0);
+
+            var targetVolume = 45;
+            var currentVolume = 0;
+            var fadeInterval = setInterval(function() {
+                if (currentVolume < targetVolume) {
+                    currentVolume += 5;
+                    player.setVolume(currentVolume);
+                } else {
+                    clearInterval(fadeInterval);
+                }
+            }, 300);
+        }
+
+        window.addEventListener('click', startRain);
+        window.addEventListener('touchstart', startRain);
+        window.addEventListener('keydown', startRain);
+    </script>
+
+</body>
+</html>
