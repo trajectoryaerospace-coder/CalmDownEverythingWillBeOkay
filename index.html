@@ -881,107 +881,35 @@
 
     </div>
 
-    <div id="youtube-player-container"></div>
-    <script>
-        var isUnlocked = false;
-        var player;
-        var isPlaying = false;
+<script>
+    // Create a new audio object using your local file
+    var audioPlayer = new Audio('rain.mp3');
+    
+    // Configure settings: loop and start muted for the fade-in
+    audioPlayer.loop = true;
+    audioPlayer.volume = 0;
 
-        // Click to expand/collapse cards smoothly
-        function toggleCard(cardElement) {
-            if (!isUnlocked) return;
-            document.querySelectorAll('.step-card').forEach(otherCard => {
-                if (otherCard !== cardElement) {
-                    otherCard.classList.remove('expanded');
+    // Start playing once the audio is ready
+    audioPlayer.addEventListener('canplaythrough', function() {
+        audioPlayer.play().then(function() {
+            // Smooth volume fade-in
+            var targetVolume = 0.45; // In standard HTML5 audio, volume ranges from 0.0 to 1.0 (0.45 is 45%)
+            var currentVolume = 0;
+            var fadeInterval = setInterval(function() {
+                if (currentVolume < targetVolume) {
+                    currentVolume += 0.05; // Increase by 5% increments
+                    // Cap it at target volume to prevent exceeding 1.0
+                    audioPlayer.volume = Math.min(currentVolume, targetVolume);
+                } else {
+                    clearInterval(fadeInterval);
                 }
-            });
-            cardElement.classList.toggle('expanded');
-        }
-
-        // Add explicit click listener on the sunflower wrapper to reveal everything
-        document.getElementById('sunflowerWrapper').addEventListener('click', function(e) {
-            e.stopPropagation(); 
-            
-            if (!isUnlocked) {
-                isUnlocked = true;
-                
-                // Activate core components
-                document.getElementById('mainHeader').classList.add('active');
-                document.getElementById('scrollIndicator').classList.add('active');
-                document.getElementById('scrollContent').classList.add('active');
-                document.getElementById('breathingStage').classList.add('active-flower');
-                
-                // Allow page scrolling on layout
-                document.body.style.pointerEvents = "auto";
-
-                // FIX: Load and play the audio directly inside the user click event
-                startRainAudio();
-            }
+            }, 200);
+        }).catch(function(error) {
+            console.log("Playback blocked by browser autoplay policy. Require user interaction.", error);
         });
+    });
+</script>
 
-        // Adjust headers and stages depending on scrolling levels
-        window.addEventListener('scroll', () => {
-            if (!isUnlocked) return;
-            if (window.scrollY > 30) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-        });
-
-        // Load YouTube Iframe Player API dynamically
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        // This just registers the API, we don't play yet
-        function onYouTubeIframeAPIReady() {
-            // Player will be built when clicked to bypass autoplay blocks
-        }
-
-        function startRainAudio() {
-            if (isPlaying) return;
-            isPlaying = true;
-
-            // Create the player directly on user interaction
-            player = new YT.Player('youtube-player-container', {
-                height: '1',
-                width: '1',
-                videoId: 'HWgOhngBGZo', 
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'disablekb': 1,
-                    'fs': 0,
-                    'loop': 1,
-                    'playlist': 'HWgOhngBGZo',
-                    'modestbranding': 1,
-                    'rel': 0,
-                    'showinfo': 0
-                },
-                events: {
-                    'onReady': function(event) {
-                        event.target.unMute();
-                        event.target.setVolume(0);
-                        event.target.playVideo();
-
-                        // Smooth volume fade-in
-                        var targetVolume = 45;
-                        var currentVolume = 0;
-                        var fadeInterval = setInterval(function() {
-                            if (currentVolume < targetVolume) {
-                                currentVolume += 5;
-                                player.setVolume(currentVolume);
-                            } else {
-                                clearInterval(fadeInterval);
-                            }
-                        }, 200);
-                    }
-                }
-            });
-        }
-    </script> 
     
 </body>
 </html>
